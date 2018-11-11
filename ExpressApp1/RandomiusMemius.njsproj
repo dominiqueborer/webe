@@ -3,7 +3,7 @@
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">14.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
-    <Name>ExpressApp1</Name>
+    <Name>RandomiusMemius</Name>
     <RootNamespace>ExpressApp1</RootNamespace>
     <LastActiveSolutionConfig>Debug|Any CPU</LastActiveSolutionConfig>
   </PropertyGroup>
@@ -12,7 +12,8 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>56a64a24-b134-4bae-b7b8-7b880f907ede</ProjectGuid>
-    <ProjectHome>.</ProjectHome>
+    <ProjectHome>
+    </ProjectHome>
     <StartupFile>app.js</StartupFile>
     <SearchPath>
     </SearchPath>
@@ -56,13 +57,20 @@
     <Content Include="package.json" />
     <Content Include="public\stylesheets\main.css" />
     <Content Include="README.md" />
+    <Content Include="views\footer.pug">
+      <SubType>Code</SubType>
+    </Content>
     <Content Include="views\home.pug">
       <SubType>Code</SubType>
     </Content>
+    <Content Include="views\index - Copy.pug" />
     <Content Include="views\index.pug" />
     <Content Include="views\layout.pug" />
     <Content Include="views\error.pug" />
     <Content Include="views\login.pug">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="views\memePage.pug">
       <SubType>Code</SubType>
     </Content>
   </ItemGroup>

@@ -1,7 +1,23 @@
 ﻿doctype html
 html
-  head
-    title= title
-    link(rel='stylesheet', href='/stylesheets/main.css')
-  body
+    head
+        meta(charset="UTF-8")
+        title= title
+        link(rel='stylesheet',type="text/css", href='/stylesheets/randomiusmemius.css')
+    body
+    block nav
+        body
+            nav(id="mainNav", class="mainNav")
+                a(href="/") #[h1= title]
+                div(id="userHandling", class="userHandling")
+                    if user
+                        a(href="/profile") #{user.username}
+                    else 
+                        || #[a(href="/login") Register Now!] | #[a(href="/login") Sign in]
+                        
     block content
+
+    block footer
+        footer   
+            p Posted by: Vasily Zaytsev
+            p Contact information: #[a(href="mailto:maildoesnt@exist.njet") maildoesnt@exist.njet]

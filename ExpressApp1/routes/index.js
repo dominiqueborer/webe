@@ -74,7 +74,7 @@ router.get('/', function (req, res) {
                 'allEntries': rDataEntries//rmDB.getSqlQueryResponse(config, 'select * from rDataTable')//getSqlQuery()
                 
             }
-            res.render('index', { title: 'Express', "data": data, "user": req.user });
+            res.render('index', { title: 'Randomius Memius', "data": data, "user": req.user });
 
 
         } catch (err) {
