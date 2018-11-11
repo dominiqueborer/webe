@@ -31,6 +31,9 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="app.js" />
+    <Compile Include="config\passport-config.js">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="db\index.js" />
     <Compile Include="db\users.js" />
     <Compile Include="modules\dbtest.js">
@@ -53,6 +56,9 @@
     <Content Include="package.json" />
     <Content Include="public\stylesheets\main.css" />
     <Content Include="README.md" />
+    <Content Include="views\home.pug">
+      <SubType>Code</SubType>
+    </Content>
     <Content Include="views\index.pug" />
     <Content Include="views\layout.pug" />
     <Content Include="views\error.pug" />
@@ -63,6 +69,7 @@
   <ItemGroup>
     <Folder Include="modules\" />
     <Folder Include="db\" />
+    <Folder Include="config\" />
     <Folder Include="public\" />
     <Folder Include="public\images\" />
     <Folder Include="public\javascripts\" />

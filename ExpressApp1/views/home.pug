@@ -1,0 +1,9 @@
+﻿extends layout
+
+block content
+  h1= title
+  p 
+        if !user
+            p Welcome! Please #[a(href="/login") log in.]
+        else 
+            p Hello, #{user.username}. View your #[a(href="/profile") profile.]

@@ -3,6 +3,13 @@
 block content
   h1= title
   p Welcome to #{title}
+  p 
+        if user
+            p Hello, #{user.username}. View your #[a(href="/profile") profile.]
+        else 
+            p Welcome! Please #[a(href="/login") log in.]
+            
+ 
   script.
     var f1 = function() { document.getElementById('myImage').src='#{data.item1}' }
   script.
