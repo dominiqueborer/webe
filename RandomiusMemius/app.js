@@ -15,7 +15,11 @@ require('./config/passport-config');
 
 var routes = require('./routes/index');
 var users = require('./routes/users');
+var createMemes = require('./routes/createMeme');
 var sqlConnectionTest = require('./routes/sqlConnectionTest');
+
+//Get App constants - to be configured externally in a future release
+var rmGlobalConstants = require('./modules/randomiusMemiusGlobalConstants');
 
 
 
@@ -51,6 +55,7 @@ app.use(passport.session());
 
 // Define routes.
 app.use('/', routes);
+app.use('/createMeme', createMemes);
 //app.use('/users', users);
 //app.use('/sqlConnectionTest', sqlConnectionTest);
 
@@ -75,6 +80,9 @@ app.get('/logout',
         req.logout();
         res.redirect('/');
     });
+
+
+
 
 app.get('/profile',
     require('connect-ensure-login').ensureLoggedIn(),

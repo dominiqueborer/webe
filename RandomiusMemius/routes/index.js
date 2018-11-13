@@ -12,6 +12,7 @@ var dtr = require('../modules/testmodule');
 const sql = require('mssql');
 var passport = require('passport');
 require('../config/passport-config');
+var rmGlobalConstants = require('../modules/randomiusMemiusGlobalConstants');
 
 var config = {
     user: 'randomiusmemius',
@@ -74,13 +75,16 @@ router.get('/', function (req, res) {
                 'allEntries': rDataEntries//rmDB.getSqlQueryResponse(config, 'select * from rDataTable')//getSqlQuery()
                 
             }
-            res.render('index', { title: 'Randomius Memius', "data": data, "user": req.user });
+            data = Object.assign(data, rmGlobalConstants.getAllConstants() );
+            let globalConst = rmGlobalConstants.getAllConstants();
+            res.render('index', { "rmGlobalConst": globalConst, "data": data, "user": req.user });
 
 
         } catch (err) {
             // ... error checks
-            const reason = new Error('mom is not happy');
-            reject(reason);
+
+            
+            reject(err);
         }
 
     })();

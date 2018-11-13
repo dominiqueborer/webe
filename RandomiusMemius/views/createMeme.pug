@@ -1,0 +1,12 @@
+﻿extends layout
+
+block content
+    if user
+        form(action="/createMeme/fileupload" method="post" class="createMeme" enctype="multipart/form-data")
+                | Meme Title: #[input(type="text" name="memeTitle")]
+                br
+                | Select your Meme: #[input(type="file" name="memeFile" accept=".jpg,.png,.gif")] 
+                br
+                input( type="submit" value="Post your FUN! :D" )
+    else
+        | Sorry, you are not logged in, #[a(href="/login") sign in here] or #[a(href="/register") register today]!

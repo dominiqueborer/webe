@@ -43,7 +43,13 @@
     <Compile Include="modules\randomiusmemiusDB.js">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="modules\randomiusMemiusGlobalConstants.js">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="modules\testmodule.js">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="routes\createMeme.js">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="routes\index.js" />
@@ -54,9 +60,15 @@
     <Compile Include="views\profile.pug">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="views\uploadedMeme.pug">
+      <SubType>Code</SubType>
+    </Compile>
     <Content Include="package.json" />
     <Content Include="public\stylesheets\main.css" />
     <Content Include="README.md" />
+    <Content Include="views\createMeme.pug">
+      <SubType>Code</SubType>
+    </Content>
     <Content Include="views\footer.pug">
       <SubType>Code</SubType>
     </Content>
@@ -71,6 +83,12 @@
       <SubType>Code</SubType>
     </Content>
     <Content Include="views\memePage.pug">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="views\register.pug">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="views\userList.pug">
       <SubType>Code</SubType>
     </Content>
   </ItemGroup>

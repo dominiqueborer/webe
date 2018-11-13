@@ -3,15 +3,18 @@ html
     head
         meta(charset="UTF-8")
         title= title
-        link(rel='stylesheet',type="text/css", href='/stylesheets/randomiusmemius.css')
+        link(rel='stylesheet',type="text/css", href='/layouts/randomiusMemius.css')
     body
     block nav
         body
             nav(id="mainNav", class="mainNav")
-                a(href="/") #[h1= title]
+                a(href="/") 
+                    h1 Randomius Memius
                 div(id="userHandling", class="userHandling")
                     if user
                         a(href="/profile") #{user.username}
+                        br
+                        a(href="/createMeme") Upload new Meme!
                     else 
                         || #[a(href="/login") Register Now!] | #[a(href="/login") Sign in]
                         

@@ -1,0 +1,26 @@
+﻿extends layout
+
+block content
+
+    p   ID: #{user.id} 
+        | Username: #{user.username} 
+        | Name: #{user.displayName} 
+        if '#{user.emails}'
+            | Email: #{user.emails[0].value}
+            a(href="/logout")   Log out
+    form(action="/profile" method="post" class="editProfile")
+        | User Login: #[input(type="text" name="id" value=user.id)]
+        br
+        | User name:  #[input(type="text" name="displayName" value=user.displayName )]
+        br
+        | Email address: #[input(type="text" name="mail" value=user.mail )]
+        p(class="profileNote") Note: To change your password or mail address, you have to enter your current password.
+        | Password: #[input( type="password" name="Password")]
+        br
+        | New Password: #[input( type="password" name="NewPassword")]
+        br
+        | Re-enter Password: #[input( type="password" name="confirmedPassword") ]
+        br
+        input( type="submit" value="Delete Profile" )
+        input( type="submit" value="Submit"  )
+
