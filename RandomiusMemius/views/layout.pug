@@ -3,18 +3,18 @@ html
     head
         meta(charset="UTF-8")
         title= title
-        link(rel='stylesheet',type="text/css", href='/layouts/randomiusMemius.css')
+        link(rel='stylesheet',type="text/css", href='/stylesheets/randomiusMemius.css')
     body
     block nav
         body
             nav(id="mainNav", class="mainNav")
-                a(href="/") 
+                a(href="/", class="navLeft") 
                     h1 Randomius Memius
                 div(id="userHandling", class="userHandling")
                     if user
-                        a(href="/profile") #{user.username}
-                        br
-                        a(href="/createMeme") Upload new Meme!
+                        ul
+                            li #[a(href="/profile") #{user.username}]
+                            li #[a(href="/createMeme") Upload new Meme!]
                     else 
                         || #[a(href="/login") Register Now!] | #[a(href="/login") Sign in]
                         

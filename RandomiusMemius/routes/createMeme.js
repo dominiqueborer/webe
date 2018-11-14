@@ -14,13 +14,14 @@ var passport = require('passport');
 require('../config/passport-config');
 var formidable = require('formidable');
 var fs = require('fs');
+util = require('util');
 
 
 
 
 
 
-/* GET home page. */
+/* GET CreateMeme page. */
 router.get('/', function (req, res) {
     if (req.url == '/fileupload') {
         var form = new formidable.IncomingForm();
@@ -37,6 +38,7 @@ router.get('/', function (req, res) {
         res.render('createMeme', { "user": req.user });
     }
 });
+/* POST CreateMeme/fileupload page. */
 router.post('/fileupload', require('connect-ensure-login').ensureLoggedIn(), function (req, res) {
     
     (async () => {
@@ -46,65 +48,50 @@ router.post('/fileupload', require('connect-ensure-login').ensureLoggedIn(), fun
             //Uploading file to local storage           
             let form = new formidable.IncomingForm();
             let fileNameToDB = "";
-            form.parse(req);
-
-            form.on('fileBegin', function (name, file) {
-                //change name, but keep file ending
-                let splittedName = file.name.toString().split(".");
-                let uuidv4Meme = uuidv4();
-                fileNameToDB = uuidv4Meme + "." + splittedName[splittedName.length - 1];
-                file.name = fileNameToDB;
-                file.path = "C:/Images/" + file.name; // __dirname + file.name;//'/uploads/' + file.name;
-            });
-
-
-            //Updating database and store meta information
-            let pool = await new sql.ConnectionPool(rmDB.getSqlConfig());
-            await pool.connect();
-            let insertMemeReq = await pool.request()
-                .input("memeTitle", "random")
-                .input("memeCreated", sql.DateTime, new Date())
-                .input("memeFileName", fileNameToDB)
-                .input("userId", 2)
-                //.input('input_parameter', sql.Int, value)
-                .query('insert into MemeSet (MemeTitle, MemeCreated, MemeFileName, UserUserId) values (@memeTitle,@memeCreated,@memeFileName,@userId)', (err, result) => {
-                    console.dir(result);
-                    if (err) {
-                        varErrorToUser += "Error uploading Meme: " + err.toString();
+            let memeTitle = "";
+            form.parse(req)
+                .on('field', function (name, value) {
+                    switch (name) {
+                        case "memeTitle":
+                            memeTitle = value;
+                            break;
+                        default:
+                            break;
                     }
+                })
+                .on('fileBegin', function (name, file) {
+                    //change name, but keep file ending
+                    let splittedName = file.name.toString().split(".");
+                    let uuidv4Meme = uuidv4();
+                    fileNameToDB = uuidv4Meme + "." + splittedName[splittedName.length - 1];
+                    file.name = fileNameToDB;
+                    //let pathToBeMoved = path.join(__dirname, '/public/images/');
+                    let pathToBeMoved = path.resolve('./public/images/');
+                    //Check path, if it is writable
+                    try {
+                        fs.accessSync(pathToBeMoved, fs.constants.W_OK);
+                        //console.log('can write %s', path);
+                    } catch (err) {
+                        console.log("%s doesn't exist", pathToBeMoved);
+                        res.status(500).send("Error writing to file system: " + err.toString());
+                    }
+                    file.path = pathToBeMoved + "/" + file.name;
+                    //file.path = "C:/Images/" + file.name; 
+                    //Updating database and store meta information
+                    rmDB.insertNewMeme(memeTitle, fileNameToDB, 2).then(result => {
+                    res.render('uploadedMeme', { "varErrorToUser": varErrorToUser, "user": req.user });
                 });
-            
-
-
-
-            
-
-            res.render('uploadedMeme', { "varErrorToUser": varErrorToUser, "user": req.user });
+                
+            });
         } catch (err) {
             // ... error checks
-
-
-            reject(err);
+            varErrorToUser += "Error uploading Meme: " + err.toString();
+            res.render('uploadedMeme', { "varErrorToUser": varErrorToUser, "user": req.user });
+            //reject(err);
         }
 
     })();
 });
-//router.get('/createMeme/fileupload', require('connect-ensure-login').ensureLoggedIn(), function (req, res) {
-//    if (req.url == '/fileupload') {
-//        var form = new formidable.IncomingForm();
-//        form.parse(req, function (err, fields, files) {
-//            var oldpath = files.filetoupload.path;
-//            var newpath = 'C:/Images/' + files.filetoupload.name;
-//            fs.rename(oldpath, newpath, function (err) {
-//                if (err) throw err;
-//                res.write('File uploaded and moved!');
-//                res.end();
-//            });
-//        });
-//    } else {
-//        res.render('createMeme', { "user": req.user });
-//    }
-//});
 
 
 module.exports = router;

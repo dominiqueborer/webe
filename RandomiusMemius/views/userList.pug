@@ -3,13 +3,13 @@
 block content
     h2 All users
     table
-        each user in #{userList}
+        each userItem in users
             tr
-                td user.displayName
-                if user.banned
+                td #{userItem.LoginName}
+                if userItem.Banned
                     td 
-                    button(class="banned") De-Ban
+                        button(class="banned") De-Ban
                 else
                     td 
-                    button(class="notBanned") Ban
+                        button(class="notBanned") Ban
                 

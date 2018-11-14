@@ -49,6 +49,9 @@
     <Compile Include="modules\testmodule.js">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="routes\api.js">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="routes\createMeme.js">
       <SubType>Code</SubType>
     </Compile>
@@ -64,7 +67,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Content Include="package.json" />
+    <Content Include="public\favicon.ico" />
     <Content Include="public\stylesheets\main.css" />
+    <Content Include="public\stylesheets\randomiusMemius.css" />
     <Content Include="README.md" />
     <Content Include="views\createMeme.pug">
       <SubType>Code</SubType>

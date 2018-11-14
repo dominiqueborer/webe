@@ -16,6 +16,8 @@ require('./config/passport-config');
 var routes = require('./routes/index');
 var users = require('./routes/users');
 var createMemes = require('./routes/createMeme');
+var apiRoute = require('./routes/api');
+var users = require('./routes/users');
 var sqlConnectionTest = require('./routes/sqlConnectionTest');
 
 //Get App constants - to be configured externally in a future release
@@ -35,7 +37,7 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, '/public')));
 
 //app.use('/', routes);
 //app.use('/users', users);
@@ -56,7 +58,8 @@ app.use(passport.session());
 // Define routes.
 app.use('/', routes);
 app.use('/createMeme', createMemes);
-//app.use('/users', users);
+app.use('/api', apiRoute);
+app.use('/users', users);
 //app.use('/sqlConnectionTest', sqlConnectionTest);
 
 //app.get('/',

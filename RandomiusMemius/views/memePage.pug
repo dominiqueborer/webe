@@ -1,6 +1,6 @@
-﻿article(id="meme1234" class="memes")
-	h1 #[a(href="/meme1234") Meme Titel]
-	a(href="/meme1234") #[img(src="/photos/meme1234.jpg")]
+﻿article(id=meme.Id class="memes")
+	h2 #[a(href="/meme1234") #{meme.MemeTitle}]
+	a(href="/meme1234") #[img(src="/images/" + meme.MemeFileName)]
 	section(class="commentsUnloaded")
-		a(href="/meme1234") 20 Comments
+		a(href="/meme/" + meme.Id) 20 Comments
 

@@ -10,6 +10,7 @@ var bodyParser = require('body-parser');
 var dtr = require('../modules/testmodule');
 //var rmDB = require('../modules/randomiusmemiusDB');
 const sql = require('mssql');
+var rmDB = require('../modules/randomiusmemiusDB');
 var passport = require('passport');
 require('../config/passport-config');
 var rmGlobalConstants = require('../modules/randomiusMemiusGlobalConstants');
@@ -57,33 +58,18 @@ router.get('/', function (req, res) {
     (async () => {      
 
         try {
-            let pool = await new sql.ConnectionPool(config);
-            await pool.connect();
-            let rDataEntries = "";
-            let result1 = await pool.request()
-                //.input('input_parameter', sql.Int, value)
-                .query('select * from rDataTable');
-            await result1["recordset"].forEach(function (element) {
-                rDataEntries += element["randomData"];
-            });
-
+            let memes = await rmDB.getMemes(1, 10);
             let data = {
-                'item1': 'http://public-domain-photos.com/free-stock-photos-1/flowers/cactus-76.jpg',
-                'item2': 'http://public-domain-photos.com/free-stock-photos-1/flowers/cactus-77.jpg',
-                'item3': 'http://public-domain-photos.com/free-stock-photos-1/flowers/cactus-78.jpg',
-                'rDateTime': dtr.myDateTime(),
-                'allEntries': rDataEntries//rmDB.getSqlQueryResponse(config, 'select * from rDataTable')//getSqlQuery()
+                'memes': memes//rmDB.getSqlQueryResponse(config, 'select * from rDataTable')//getSqlQuery()
                 
             }
             data = Object.assign(data, rmGlobalConstants.getAllConstants() );
-            let globalConst = rmGlobalConstants.getAllConstants();
-            res.render('index', { "rmGlobalConst": globalConst, "data": data, "user": req.user });
+            //let globalConst = rmGlobalConstants.getAllConstants();
+            res.render('index', { "data": data, "user": req.user });
 
 
         } catch (err) {
             // ... error checks
-
-            
             reject(err);
         }
 
