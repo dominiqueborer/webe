@@ -71,6 +71,11 @@
     <Content Include="public\stylesheets\main.css" />
     <Content Include="public\stylesheets\randomiusMemius.css" />
     <Content Include="README.md" />
+    <Content Include="SQLConfigurationScripts\createStoredProcedures.sql" />
+    <Content Include="SQLConfigurationScripts\InsertScripts\InsertAdminUser.sql" />
+    <Content Include="SQLConfigurationScripts\InsertScripts\InsertRoles.sql" />
+    <Content Include="SQLConfigurationScripts\InsertScripts\InsertUsers.sql" />
+    <Content Include="SQLConfigurationScripts\RandomiusMemiusDB.edmx.sql" />
     <Content Include="views\createMeme.pug">
       <SubType>Code</SubType>
     </Content>
@@ -106,6 +111,8 @@
     <Folder Include="public\javascripts\" />
     <Folder Include="public\stylesheets\" />
     <Folder Include="routes\" />
+    <Folder Include="SQLConfigurationScripts\" />
+    <Folder Include="SQLConfigurationScripts\InsertScripts\" />
     <Folder Include="views\" />
   </ItemGroup>
   <!-- Do not delete the following Import Project.  While this appears to do nothing it is a marker for setting TypeScript properties before our import that depends on them. -->

@@ -2,7 +2,7 @@
 -- --------------------------------------------------
 -- Entity Designer DDL Script for SQL Server 2005, 2008, 2012 and Azure
 -- --------------------------------------------------
--- Date Created: 11/13/2018 17:17:57
+-- Date Created: 11/14/2018 18:23:03
 -- Generated from EDMX file: C:\Users\Administrator\source\repos\SQLDataRandomiusMemius\SQLDataRandomiusMemius\RandomiusMemiusDB.edmx
 -- --------------------------------------------------
 
@@ -61,7 +61,7 @@ GO
 CREATE TABLE [dbo].[MemeSet] (
     [Id] bigint IDENTITY(1,1) NOT NULL,
     [MemeTitle] nvarchar(max)  NOT NULL,
-    [MemeCreated] time  NOT NULL,
+    [MemeCreated] datetime  NOT NULL,
     [MemeFileName] nvarchar(max)  NOT NULL,
     [UserUserID] int  NOT NULL
 );
