@@ -92,6 +92,7 @@
     <Content Include="views\login.pug">
       <SubType>Code</SubType>
     </Content>
+    <Content Include="views\memeSection.pug" />
     <Content Include="views\memePage.pug">
       <SubType>Code</SubType>
     </Content>

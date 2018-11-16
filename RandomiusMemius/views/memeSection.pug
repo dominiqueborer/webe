@@ -1,0 +1,9 @@
+﻿article(id=meme.Id class="memes")
+    h2 #[a(href="/meme"+meme.Id) #{meme.MemeTitle}]
+    a(href="/meme1234") #[img(src="/images/" + meme.MemeFileName)]
+    section(class="commentsUnloaded")
+        a(href="/meme" + meme.Id) 
+            if meme.CommentCount
+                | #{meme.CommentCount} Comments
+            else 
+                |0 Comments

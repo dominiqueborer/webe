@@ -55,15 +55,15 @@ router.get('/', function (req, res) {
     //dbtest.messageHandler();
     //let resultTable = dbtest.getRDataTableRows();
 
-    (async () => {      
+    (async () => {
 
         try {
             let memes = await rmDB.getMemes(1, 10);
             let data = {
                 'memes': memes//rmDB.getSqlQueryResponse(config, 'select * from rDataTable')//getSqlQuery()
-                
+
             }
-            data = Object.assign(data, rmGlobalConstants.getAllConstants() );
+            data = Object.assign(data, rmGlobalConstants.getAllConstants());
             //let globalConst = rmGlobalConstants.getAllConstants();
             res.render('index', { "data": data, "user": req.user });
 
@@ -74,6 +74,39 @@ router.get('/', function (req, res) {
         }
 
     })();
+
+
+
+});
+
+/* GET single Meme page. */
+router.get('/meme([0-9]{1,3})', function (req, res) {
+    //dbtest.messageHandler();
+    //let resultTable = dbtest.getRDataTableRows();
+    let memeId = req.url.split("/meme");
+    memeId = memeId[memeId.length-1];
+    if (!isNaN(memeId)) {
+        (async () => {
+
+            try {
+                let meme = await rmDB.getMeme(memeId);
+                //let recordset = result.recordset[0];
+                //sql server could possibly return multiple rows, only return 1 and if 0 or more => reject
+                if (meme.length == 1) {
+                    meme = meme[0];
+                    let commments = await rmDB.getMemeComments(memeId, 1, 10);
+                    res.render('memePage', { "meme": meme, "comments": commments, "user": req.user });
+                } else {
+                    res.status(500).send("Error in retrieving Meme. Result length is: " + meme.length);
+                }
+            } catch (err) {
+                // ... error checks
+                res.render('memePage', { "error": err.toString(), "user": req.user });
+            }
+
+        })();
+    } 
+    
 
 
 

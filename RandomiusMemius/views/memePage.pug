@@ -1,6 +1,19 @@
-﻿article(id=meme.Id class="memes")
-	h2 #[a(href="/meme1234") #{meme.MemeTitle}]
-	a(href="/meme1234") #[img(src="/images/" + meme.MemeFileName)]
-	section(class="commentsUnloaded")
-		a(href="/meme/" + meme.Id) 20 Comments
+﻿extends layout
 
+block content
+    article(id=meme.Id class="memes")
+        h2 #[a(href="/meme"+meme.Id) #{meme.MemeTitle}]
+        a(href="/meme1234") #[img(src="/images/" + meme.MemeFileName)]
+        section(class="commentsLoaded")
+            each comment in comments
+                div(class="comment" ) #{comment.Created} #{comment.LoginName}
+                    br
+                    | #{comment.Comment}
+
+        if user 
+            form(action="/meme"+meme.Id id="comment" + meme.Id)
+                textarea(rows="4" cols="50" name="comment" form="comment" + meme.Id) Enter comment here...
+                input( type="submit")
+            
+        else
+            p If you want to post a comment, you need to #[a(href="/login" class="signIn") sign in]. Already have an account? #[a(href="/login" class="alreadyAccount") Sign in here!]

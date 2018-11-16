@@ -79,8 +79,11 @@ router.post('/fileupload', require('connect-ensure-login').ensureLoggedIn(), fun
                     //file.path = "C:/Images/" + file.name; 
                     //Updating database and store meta information
                     rmDB.insertNewMeme(memeTitle, fileNameToDB, 2).then(result => {
-                    res.render('uploadedMeme', { "varErrorToUser": varErrorToUser, "user": req.user });
-                });
+
+                        res.render('uploadedMeme', {"user": req.user });
+                    }).catch(function (error) {
+                        res.render('uploadedMeme', { "varErrorToUser": error.toString(), "user": req.user });
+                    });
                 
             });
         } catch (err) {
