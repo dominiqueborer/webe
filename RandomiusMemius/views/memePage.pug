@@ -4,16 +4,20 @@ block content
     article(id=meme.Id class="memes")
         h2 #[a(href="/meme"+meme.Id) #{meme.MemeTitle}]
         a(href="/meme1234") #[img(src="/images/" + meme.MemeFileName)]
-        section(class="commentsLoaded")
+        section(class="commentsLoaded" id="rmCommentContainer")
+            
             each comment in comments
-                div(class="comment" ) #{comment.Created} #{comment.LoginName}
+                div(class="comment") #{comment.Created} #{comment.LoginName}
                     br
                     | #{comment.Comment}
 
         if user 
-            form(action="/meme"+meme.Id id="comment" + meme.Id)
-                textarea(rows="4" cols="50" name="comment" form="comment" + meme.Id) Enter comment here...
-                input( type="submit")
+            form(action="meme"+meme.Id id="memeCommentForm" method="POST")
+                input(type="hidden" id="memeId"+meme.Id name="memeId" value=meme.Id)
+                input(type="hidden" id="rmPageCounter" name="rmPageCounter" value="1")
+                textarea(rows="4" cols="50" name="comment" form="memeCommentForm"+meme.Id ) Enter comment here...
+                br
+                input(type="submit" value="Post comment")
             
         else
             p If you want to post a comment, you need to #[a(href="/login" class="signIn") sign in]. Already have an account? #[a(href="/login" class="alreadyAccount") Sign in here!]

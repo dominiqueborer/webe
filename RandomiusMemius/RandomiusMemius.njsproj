@@ -49,6 +49,10 @@
     <Compile Include="modules\testmodule.js">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="public\javascripts\jquery-3.3.1.min.js" />
+    <Compile Include="public\javascripts\rmFunctions.js">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="routes\api.js">
       <SubType>Code</SubType>
     </Compile>

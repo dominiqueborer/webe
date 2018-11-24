@@ -16,6 +16,11 @@ var formidable = require('formidable');
 var fs = require('fs');
 util = require('util');
 
+router.use(bodyParser.json());
+router.use(bodyParser.urlencoded({     // to support URL-encoded bodies
+    extended: true
+})); 
+
 
 
 /* GET CreateMeme page. */
@@ -56,4 +61,50 @@ router.get('/memes/:page([0-9]+)', function (req, res) {
 
     })();
 });
+/* Get comments  */
+router.get('/memes/getMemeComments/:page([0-9]+)/:memeId([0-9]+)', function (req, res) {
+    //Return page *10 
+    const page = parseInt(req.params.page, 10);
+    const memeId = parseInt(req.params.memeId, 10);
+    (async () => {
+        try {
+            const memeCommentsJSON = await rmDB.getMemeComments(memeId,page, 10)
+            res.status(200).send({
+                success: 'true',
+                message: 'meme comments retrieved successfully',
+                memeComments: memeCommentsJSON
+            })
+            //res.write(await rmDB.getMemes(1, 10));
+        } catch (err) {
+            res.status(500).send("Error retrieving Meme Comments: " + err.toString());
+        }
+        //let resultset = await rmDB.getMemes(1, 10);
+
+    })();
+});
+/* POST a new comment  */
+router.post('/memes/newcomment', function (req, res) {
+    //Parse comment data
+    if (req.body.comment && req.body.memeId) { // && req.params.user) {
+        const comment = req.body.comment;
+        const userId = 1;//parseInt(req.params.user.userId, 10);
+        const memeId = parseInt(req.body.memeId, 10);
+        (async () => {
+            try {
+                await rmDB.insertNewMemeComment(comment, memeId, userId);
+                res.send({
+                    success: 'true',
+                    message: 'inserted Meme Comment successfully'
+                });
+                //res.write(await rmDB.getMemes(1, 10));
+            } catch (err) {
+                res.status(500).send("Error inserting Meme Comment: " + err.toString());
+            }
+        })();
+    } else {
+        res.status(500).send("Invalid new Comment Request!");
+
+    }
+});
+
 module.exports = router;

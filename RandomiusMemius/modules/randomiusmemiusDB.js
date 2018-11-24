@@ -217,21 +217,22 @@ exports.insertNewMemeComment = function (memeComment, memeId, userID) {
 
                 await pool.connect();
                 await pool.request()
-                    .input("memeComment", memeTitle)
-                    .input("Created", sql.DateTime, new Date())
+                    .input("memeComment", memeComment)
+                    .input("created", sql.DateTime, new Date())
                     .input("userId", userID)
+                    .input("memeId", memeId)
                     //.input('input_parameter', sql.Int, value)
-                    .query('insert into MemeSet (Comment, MemeCreated, UserUserId) values (@memeComment,@Created,@userId)', (err, result) => {
+                    .query('insert into MemeCommentSet (Comment, Created, UserUserId,MemeId) values (@memeComment,@created,@userId,@memeId)', (err, result) => {
                         console.dir(result);
                         if (err) {
-                            let varErrorToUser = "Error uploading Meme: " + err.toString();
+                            let varErrorToUser = "Error inserting Meme Comment: " + err.toString();
                             reject(varErrorToUser);
                         }
                     });
                 resolve("Successfully inserted Meme to DB");
             } catch (err) {
                 let msgErr = "Error database: " + err.toString();
-                return msgErr
+                
                 reject(msgErr);
             }
         })();
