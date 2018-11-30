@@ -2,6 +2,7 @@
 var passport = require('passport');
 var Strategy = require('passport-local').Strategy;
 var db = require('../db');
+var rmDB = require('../modules/randomiusmemiusDB');
 //**************Passport config***************
 
 // Configure the local strategy for use by Passport.
@@ -12,11 +13,39 @@ var db = require('../db');
 // will be set at `req.user` in route handlers after authentication.
 passport.use(new Strategy(
     function (username, password, cb) {
-        db.users.findByUsername(username, function (err, user) {
-            if (err) { return cb(err); }
-            if (!user) { return cb(null, false); }
-            if (user.password != password) { return cb(null, false); }
-            return cb(null, user);
+        process.nextTick(function () {
+            //User exists, compare entered password
+            //if (user.password != password) { return cb(null, false); }
+            (async () => {
+                try {
+                    let loginRequest = await rmDB.findByUsername(username);
+                    if (!loginRequest.includes("Username Exists")) {
+                        return cb(null, false);
+                    } 
+                    //Try to authenticate 
+                    let loginAuth = await rmDB.getUserAuthentication(username, password);
+                    if (loginAuth.includes("User successfully logged in")) {
+                        // Now get user information and match it to passport
+                        let userSql = await rmDB.getUser(username);
+                        let user = { id: userSql.UserId, username: userSql.LoginName, displayName: userSql.LoginName, emails: [{ value: userSql.Mail }] };
+
+                        return cb(null, user);
+
+                    } else {
+                        //wrong password
+                        return cb(null, false);
+                    }
+                    
+                } catch (err) {
+                    //Insert SQL Log 
+                    console.log(err.toString());
+                    return cb(err);
+                }
+
+            })();
+            //if (user.password != password) { return cb(null, false); }
+      
+            //return cb(null, user);
         });
     }));
 
@@ -33,10 +62,38 @@ passport.serializeUser(function (user, cb) {
 });
 
 passport.deserializeUser(function (id, cb) {
-    db.users.findById(id, function (err, user) {
-        if (err) { return cb(err); }
-        cb(null, user);
+    
+
+    process.nextTick(function () {
+        //User exists, compare entered password
+        //if (user.password != password) { return cb(null, false); }
+        (async () => {
+            try {
+                let getUserByUserId = await rmDB.findByUserId(id);
+                if (!getUserByUserId.includes("UserId Exists")) {
+                    return cb(null, new Error('User ' + id + ' does not exist'));
+                }
+                
+                // Now get user information and match it to passport
+                let userSql = await rmDB.getUserById(id);
+                let user = { id: userSql.UserId, username: userSql.LoginName, displayName: userSql.LoginName, emails: [{ value: userSql.Mail }] };
+
+                return cb(null, user);
+                
+
+            } catch (err) {
+                //Insert SQL Log 
+                console.log(err.toString());
+                return cb(err);
+            }
+
+        })();
     });
+
+    //db.users.findById(id, function (err, user) {
+    //    if (err) { return cb(err); }
+    //    cb(null, user);
+    //});
 });
 //************END Passport configuration**************
 

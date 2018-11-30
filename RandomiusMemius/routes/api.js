@@ -68,7 +68,7 @@ router.get('/memes/getMemeComments/:page([0-9]+)/:memeId([0-9]+)', function (req
     const memeId = parseInt(req.params.memeId, 10);
     (async () => {
         try {
-            const memeCommentsJSON = await rmDB.getMemeComments(memeId,page, 10)
+            const memeCommentsJSON = await rmDB.getMemeComments(memeId, page, 10)
             res.status(200).send({
                 success: 'true',
                 message: 'meme comments retrieved successfully',
@@ -79,6 +79,26 @@ router.get('/memes/getMemeComments/:page([0-9]+)/:memeId([0-9]+)', function (req
             res.status(500).send("Error retrieving Meme Comments: " + err.toString());
         }
         //let resultset = await rmDB.getMemes(1, 10);
+
+    })();
+});
+/* Get comment Pages  */
+router.get('/memes/getMemeCommentPages/:pageSize([0-9]+)/:memeId([0-9]+)', function (req, res) {
+    //Return comment pages count
+    const pageSize = parseInt(req.params.pageSize, 10);
+    const memeId = parseInt(req.params.memeId, 10);
+    (async () => {
+        try {
+            const memeCommentPagesJSON = await rmDB.getMemeCommentPages(memeId, pageSize);
+         
+            res.status(200).send({
+                success: 'true',
+                message: 'meme comment pages retrieved successfully',
+                memeCommentPages: memeCommentPagesJSON
+            });
+        } catch (err) {
+            res.status(500).send("Error retrieving meme comment pages: " + err.toString());
+        }
 
     })();
 });

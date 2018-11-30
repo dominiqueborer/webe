@@ -1,47 +1,4 @@
-﻿//function submitRMComment(formToSubmit, rmCommentContainer, rmPageCounter, memeId) {
-
-//    $.post("/api/memes/newcomment", $(formToSubmit).serialize()).done(function (data) {
-//        //$.post("/api/memes/newcomment", $(formToSubmit).serialize()).done(function (data) {
-//        //Check if POST request returned data and if it was successfully
-//        try {
-//            if (data.message.indexOf("successfully") !== -1) {
-//                $.getJSON("/api/memes/getMemeComments/" + $(rmPageCounter).val() + "/" + $(memeId).val(), function (json) {
-
-//                    json.memeComments.forEach(function (comment) {
-//                        $(rmCommentContainer).children().remove();
-//                        $(rmCommentContainer).add(comment);
-//                    });
-//                });
-//            } else {
-//                $(rmCommentContainer).add("<p>Error adding your comment, please try again.</p>");
-//            }
-//        } catch (err) {
-//            $(rmCommentContainer).add("<p>Error adding your comment, please try again." + err.toString() + "</p>");
-
-//        }
-//    });
-//    //$.post("/api/memes/newcomment", $(formToSubmit).serialize(), function (data) {
-//    //    //Check if POST request returned data and if it was successfully
-//    //    try {
-//    //        if (data.message.indexOf("successfully") !== -1) {
-//    //            $.getJSON("/api/memes/getMemeComments/" + $(rmPageCounter).val() + "/" + $(memeId).val(), function (json) {
-
-//    //                json.memeComments.forEach(function (comment) {
-//    //                    $(rmCommentContainer).children().remove();
-//    //                    $(rmCommentContainer).add(comment);
-//    //                });
-//    //            });
-//    //        } else {
-//    //            $(rmCommentContainer).add("<p>Error adding your comment, please try again.</p>");
-//    //        }
-//    //    } catch(err){
-//    //        $(rmCommentContainer).add("<p>Error adding your comment, please try again."+err.toString()+"</p>");
-
-//    //    }
-//    //});
-
-//}
-
+﻿
 //Execute as soon as document is loaded fully
 $(function () {
     // Attach a submit handler to the form
@@ -52,9 +9,9 @@ $(function () {
 
         // Get some values from elements on the page:
         var $form = $(this),
-            memeIdStr = $form.find("input[name='memeId']").val(),
+            memeIdStr = $("#memeId").val();
             commentStr = $form.find("textarea[name='comment']").val(),
-            rmPageCounter = $form.find("input[name='rmPageCounter']").val();
+            rmPageCounter = $("#rmPageCounter").val();
 
 
         // Send the data using post
@@ -90,4 +47,28 @@ $(function () {
             });
     });
 
+    $("#loadMoreComments").click(function () {
+        let rmPageCounter = $("#rmPageCounter").val();
+        let memeIdStr = $("#memeId").val();
+        rmPageCounter++;
+        $.getJSON("/api/memes/getMemeComments/" + rmPageCounter + "/" + memeIdStr, function (json) {
+
+            json.memeComments.forEach(function (comment) {
+                var memeComment = "<div class='comment'>" + comment.Created + " " + comment.LoginName;
+                memeComment += "<br>" + comment.Comment + "</div>";
+                $("#loadMoreComments").before(memeComment);
+
+
+            });
+            $("#rmPageCounter").val(rmPageCounter);
+            let commentPages = 1;
+            $.getJSON("/api/memes/getMemeCommentPages/" + 10 + "/" + memeIdStr, function (json) {
+                commentPages = json.memeCommentPages;
+            }).always(function () {
+                if (rmPageCounter >= commentPages) {
+                    $("#loadMoreComments").hide();
+                }
+             });
+        });
+    });
 });

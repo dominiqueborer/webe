@@ -95,7 +95,8 @@ router.get('/meme([0-9]{1,3})', function (req, res) {
                 if (meme.length == 1) {
                     meme = meme[0];
                     let commments = await rmDB.getMemeComments(memeId, 1, 10);
-                    res.render('memePage', { "meme": meme, "comments": commments, "user": req.user });
+                    let commentPages = await rmDB.getMemeCommentPages(memeId, 10);
+                    res.render('memePage', { "meme": meme, "comments": commments, "commentPages": commentPages, "user": req.user });
                 } else {
                     res.status(500).send("Error in retrieving Meme. Result length is: " + meme.length);
                 }

@@ -42,10 +42,20 @@ article.memes {
 }
 article.memes h2{
     text-align: left;
-}article img {
+}
+article img {
         max-width: 50%;
         max-height: 30%;
 }
+.loadMoreComments {
+    background-color: firebrick;
+    color:ghostwhite;
+    font-weight: bold;
+    display: inline-block;
+    margin-top: 1em;
+    padding: 0.5em;
+}
+
 form.createMeme {
     margin-left: auto;
     margin-right: auto;

@@ -2,6 +2,8 @@
 
 block content
     article(id=meme.Id class="memes")
+        input(type="hidden" id="memeId" name="memeId" value=meme.Id)
+        input(type="hidden" id="rmPageCounter" name="rmPageCounter" value="1")
         h2 #[a(href="/meme"+meme.Id) #{meme.MemeTitle}]
         a(href="/meme1234") #[img(src="/images/" + meme.MemeFileName)]
         section(class="commentsLoaded" id="rmCommentContainer")
@@ -10,11 +12,11 @@ block content
                 div(class="comment") #{comment.Created} #{comment.LoginName}
                     br
                     | #{comment.Comment}
+            if(commentPages > 1)
+                button(class="loadMoreComments" id="loadMoreComments") Load more Comments
 
         if user 
-            form(action="meme"+meme.Id id="memeCommentForm" method="POST")
-                input(type="hidden" id="memeId"+meme.Id name="memeId" value=meme.Id)
-                input(type="hidden" id="rmPageCounter" name="rmPageCounter" value="1")
+            form(action="meme"+meme.Id id="memeCommentForm" method="POST")                
                 textarea(rows="4" cols="50" name="comment" form="memeCommentForm"+meme.Id ) Enter comment here...
                 br
                 input(type="submit" value="Post comment")
