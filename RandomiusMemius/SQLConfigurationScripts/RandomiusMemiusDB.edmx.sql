@@ -2,7 +2,7 @@
 -- --------------------------------------------------
 -- Entity Designer DDL Script for SQL Server 2005, 2008, 2012 and Azure
 -- --------------------------------------------------
--- Date Created: 11/14/2018 18:23:03
+-- Date Created: 11/30/2018 18:15:10
 -- Generated from EDMX file: C:\Users\Administrator\source\repos\SQLDataRandomiusMemius\SQLDataRandomiusMemius\RandomiusMemiusDB.edmx
 -- --------------------------------------------------
 
@@ -22,6 +22,9 @@ IF OBJECT_ID(N'[dbo].[FK_MemeMemeComment]', 'F') IS NOT NULL
 GO
 IF OBJECT_ID(N'[dbo].[FK_UserMeme]', 'F') IS NOT NULL
     ALTER TABLE [dbo].[MemeSet] DROP CONSTRAINT [FK_UserMeme];
+GO
+IF OBJECT_ID(N'[dbo].[FK_UserMemeComment]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[MemeCommentSet] DROP CONSTRAINT [FK_UserMemeComment];
 GO
 IF OBJECT_ID(N'[dbo].[FK_UserRoleSetUser]', 'F') IS NOT NULL
     ALTER TABLE [dbo].[User] DROP CONSTRAINT [FK_UserRoleSetUser];
@@ -53,7 +56,8 @@ CREATE TABLE [dbo].[MemeCommentSet] (
     [Id] bigint IDENTITY(1,1) NOT NULL,
     [Comment] nvarchar(max)  NOT NULL,
     [Created] datetime  NOT NULL,
-    [MemeId] bigint  NOT NULL
+    [MemeId] bigint  NOT NULL,
+    [UserUserID] int  NOT NULL
 );
 GO
 
@@ -163,6 +167,21 @@ GO
 CREATE INDEX [IX_FK_UserRoleSetUser]
 ON [dbo].[User]
     ([UserRoleSetId]);
+GO
+
+-- Creating foreign key on [UserUserID] in table 'MemeCommentSet'
+ALTER TABLE [dbo].[MemeCommentSet]
+ADD CONSTRAINT [FK_UserMemeComment]
+    FOREIGN KEY ([UserUserID])
+    REFERENCES [dbo].[User]
+        ([UserID])
+    ON DELETE NO ACTION ON UPDATE NO ACTION;
+GO
+
+-- Creating non-clustered index for FOREIGN KEY 'FK_UserMemeComment'
+CREATE INDEX [IX_FK_UserMemeComment]
+ON [dbo].[MemeCommentSet]
+    ([UserUserID]);
 GO
 
 -- --------------------------------------------------
