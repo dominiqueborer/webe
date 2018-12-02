@@ -6,8 +6,6 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 const uuidv4 = require('uuid/v4');
-//var dbtest = require('../modules/dbtest');
-var dtr = require('../modules/testmodule');
 var rmDB = require('../modules/randomiusmemiusDB');
 const sql = require('mssql');
 var passport = require('passport');
@@ -36,13 +34,11 @@ router.get('/memes', function (req, res) {
                 message: 'memes retrieved successfully',
                 memes: memesJSON
             })
-            //res.write(await rmDB.getMemes(1, 10));
         } catch (err) {
             let msgErr = "Error retrieving Memes: " + err.toString();
             winston.error(msgErr);
             res.status(500).send(msgErr);
         }
-        //let resultset = await rmDB.getMemes(1, 10);
         
     })();
 });
@@ -57,13 +53,11 @@ router.get('/memes/:page([0-9]+)', function (req, res) {
                 message: 'memes retrieved successfully',
                 memes: memesJSON
             })
-            //res.write(await rmDB.getMemes(1, 10));
         } catch (err) {
             let msgErr = "Error retrieving Memes: " + err.toString();
             winston.error(msgErr);
             res.status(500).send(msgErr);
         }
-        //let resultset = await rmDB.getMemes(1, 10);
 
     })();
 });
@@ -80,13 +74,11 @@ router.get('/memes/getMemeComments/:page([0-9]+)/:memeId([0-9]+)', function (req
                 message: 'meme comments retrieved successfully',
                 memeComments: memeCommentsJSON
             })
-            //res.write(await rmDB.getMemes(1, 10));
         } catch (err) {
             let msgErr = "Error retrieving Meme Comments: " + err.toString();
             winston.error(msgErr);
             res.status(500).send(msgErr);
         }
-        //let resultset = await rmDB.getMemes(1, 10);
 
     })();
 });
@@ -116,9 +108,9 @@ router.get('/memes/getMemeCommentPages/:pageSize([0-9]+)/:memeId([0-9]+)', funct
 router.post('/memes/newcomment',require('connect-ensure-login').ensureLoggedIn(), function (req, res) {
     //Parse comment data
     winston.info(`"User tries to post a new comment " ${req.user.toString()} - ${req.originalUrl} - ${req.method} - ${req.ip}`);
-    if (req.body.comment && req.body.memeId) { // && req.params.user) {
+    if (req.body.comment && req.body.memeId) { 
         const comment = req.body.comment;
-        const userId = 1;//parseInt(req.params.user.userId, 10);
+        const userId = req.user.id;
         const memeId = parseInt(req.body.memeId, 10);
         (async () => {
             try {
@@ -127,7 +119,6 @@ router.post('/memes/newcomment',require('connect-ensure-login').ensureLoggedIn()
                     success: 'true',
                     message: 'inserted Meme Comment successfully'
                 });
-                //res.write(await rmDB.getMemes(1, 10));
             } catch (err) {
                 res.status(500).send("Error inserting Meme Comment: " + err.toString());
             }

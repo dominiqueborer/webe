@@ -27,7 +27,6 @@ exports.insertNewMeme = function (memeTitle, memeFilename, userID) {
                     .input("memeCreated", sql.DateTime, new Date())
                     .input("memeFileName", memeFilename)
                     .input("userId", userID)
-                    //.input('input_parameter', sql.Int, value)
                     .query('insert into MemeSet (MemeTitle, MemeCreated, MemeFileName, UserUserId) values (@memeTitle,@memeCreated,@memeFileName,@userId)', (err, result) => {
                         console.dir(result);
                         if (err) {
@@ -65,19 +64,15 @@ exports.getMemes = function (page, pageSize) {
                                 reject("Error loading Users: " + err.toString());
                             }
                             pool.close();
-                            //resolve( JSON.stringify(result.recordset));
                             resolve(result.recordset);
                         });
 
                 } catch (err) {
                     let msgErr = "Error database: " + err.toString();
                     winston.error(msgErr);
-                    //return msgErr;
                     reject(msgErr);
                 }
             } else {
-                //page is not a number, throw
-                //return new Error("Variable page is not a number");
                 let msgErr = "Variable page is not a number";
                 winston.error(msgErr);
                 reject(msgErr);
@@ -103,22 +98,15 @@ exports.getUsers = function (page, pageSize) {
                                 winston.error(msgErr);
                                 reject(msgErr);
                             }
-                            //result.recordsets.forEach(function (element) {
-                            //    console.log(element);
-                            //});
-                            //resolve( JSON.stringify(result.recordset));
                             resolve(result.recordset);
                         });
 
                 } catch (err) {
                     let msgErr = "Error database: " + err.toString();
                     winston.error(msgErr);
-                    //return msgErr;
                     reject(msgErr);
                 }
             } else {
-                //page is not a number, throw
-                //return new Error("Variable page is not a number");
                 let msgErr = "Variable page is not a number";
                 winston.error(msgErr);
                 reject(msgErr);
@@ -143,29 +131,15 @@ exports.getMeme = function (memeId) {
                                 winston.error(msgErr);
                                 reject(msgErr);
                             }
-                            //result.recordsets.forEach(function (element) {
-                            //    console.log(element);
-                            //});
-                            //resolve( JSON.stringify(result.recordset));
                             resolve(result.recordset);
-                            //let recordset = result.recordset[0];
-                            ////sql server could possibly return multiple rows, only return 1 and if 0 or more => reject
-                            //if (recordset.length == 1) {
-                            //    resolve();
-                            //} else {
-                            //    reject("Error in retrieving Meme. Result length is: " + recordset.length);
-                            //}
                         });
 
                 } catch (err) {
                     let msgErr = "Error database: " + err.toString();
                     winston.error(msgErr);
-                    //return msgErr;
                     reject(msgErr);
                 }
             } else {
-                //page is not a number, throw
-                //return new Error("Variable page is not a number");
                 let msgErr = "Variable memeId is not a number";
                 winston.error(msgErr);
                 reject(msgErr);
@@ -243,8 +217,7 @@ exports.getMemeComments = function (memeId, page, pageSize) {
                     reject(msgErr);
                 }
             } else {
-                //page is not a number, throw
-                //return new Error("Variable page is not a number");
+                //page is not a number
                 let msgErr = "Parameter is not a number";
                 winston.error(msgErr);
                 reject(msgErr);
@@ -264,7 +237,6 @@ exports.insertNewMemeComment = function (memeComment, memeId, userID) {
                     .input("created", sql.DateTime, new Date())
                     .input("userId", userID)
                     .input("memeId", memeId)
-                    //.input('input_parameter', sql.Int, value)
                     .query('insert into MemeCommentSet (Comment, Created, UserUserId,MemeId) values (@memeComment,@created,@userId,@memeId)', (err, result) => {
                         console.dir(result);
                         if (err) {

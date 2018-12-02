@@ -6,14 +6,10 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
-//var dbtest = require('../modules/dbtest');
-var dtr = require('../modules/testmodule');
-//var rmDB = require('../modules/randomiusmemiusDB');
 const sql = require('mssql');
 var rmDB = require('../modules/randomiusmemiusDB');
 var passport = require('passport');
 require('../config/passport-config');
-var rmGlobalConstants = require('../modules/randomiusMemiusGlobalConstants');
 var winston = require('../modules/logging');
 
 var config = {
@@ -33,19 +29,15 @@ sql.on('error', err => {
 
 /* GET home page. */
 router.get('/', function (req, res) {
-    //dbtest.messageHandler();
-    //let resultTable = dbtest.getRDataTableRows();
 
     (async () => {
 
         try {
             let memes = await rmDB.getMemes(1, 10);
             let data = {
-                'memes': memes//rmDB.getSqlQueryResponse(config, 'select * from rDataTable')//getSqlQuery()
+                'memes': memes
 
             }
-            data = Object.assign(data, rmGlobalConstants.getAllConstants());
-            //let globalConst = rmGlobalConstants.getAllConstants();
             res.render('index', { "data": data, "user": req.user });
 
 
@@ -62,8 +54,6 @@ router.get('/', function (req, res) {
 
 /* GET single Meme page. */
 router.get('/meme([0-9]{1,3})', function (req, res) {
-    //dbtest.messageHandler();
-    //let resultTable = dbtest.getRDataTableRows();
     let memeId = req.url.split("/meme");
     memeId = memeId[memeId.length - 1];
     if (!isNaN(memeId)) {
@@ -71,7 +61,6 @@ router.get('/meme([0-9]{1,3})', function (req, res) {
 
             try {
                 let meme = await rmDB.getMeme(memeId);
-                //let recordset = result.recordset[0];
                 //sql server could possibly return multiple rows, only return 1 and if 0 or more => reject
                 if (meme.length == 1) {
                     meme = meme[0];

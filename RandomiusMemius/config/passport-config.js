@@ -1,7 +1,7 @@
 ﻿
 var passport = require('passport');
 var Strategy = require('passport-local').Strategy;
-var db = require('../db');
+//var db = require('../db');
 var rmDB = require('../modules/randomiusmemiusDB');
 var winston = require('winston');
 //**************Passport config***************
@@ -16,13 +16,11 @@ passport.use(new Strategy(
     function (username, password, cb) {
         process.nextTick(function () {
             //User exists, compare entered password
-            //if (user.password != password) { return cb(null, false); }
             (async () => {
                 try {
                     let loginRequest = await rmDB.findByUsername(username);
                     if (!loginRequest.includes("Username Exists")) {
                         winston.info("Username does not exist" + username);
-                        //loggerM.writeLogInfo("Username does not exist" + username);
                         return cb(null, false);
                     } 
                     //Try to authenticate 

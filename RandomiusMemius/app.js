@@ -6,14 +6,10 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
-var sql = require("mssql");
 var passport = require('passport');
 var morgan = require('morgan');
 var winston = require('./modules/logging');
 var rmDB = require('./modules/randomiusmemiusDB');
-
-//var Strategy = require('passport-local').Strategy;
-//var db = require('./db');
 require('./config/passport-config');
 
 
@@ -22,11 +18,6 @@ var users = require('./routes/users');
 var createMemes = require('./routes/createMeme');
 var apiRoute = require('./routes/api');
 var users = require('./routes/users');
-var sqlConnectionTest = require('./routes/sqlConnectionTest');
-
-//Get App constants - to be configured externally in a future release
-var rmGlobalConstants = require('./modules/randomiusMemiusGlobalConstants');
-
 
 
 var app = express();
@@ -35,20 +26,14 @@ var app = express();
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
 
-// uncomment after placing your favicon in /public
 app.use(favicon(__dirname + '/public/favicon.ico'));
 app.use(logger('dev'));
 app.use(bodyParser.json());
-//app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, '/public')));
 
-//app.use('/', routes);
-//app.use('/users', users);
-//app.use('/sqlConnectionTest', sqlConnectionTest);
 
 //******Additional Passport configuration*********
-//app.use(require('morgan')('combined'));
 app.use(morgan('combined', { stream: winston.stream }));
 app.use(require('cookie-parser')());
 app.use(require('body-parser').urlencoded({ extended: true }));
@@ -65,12 +50,7 @@ app.use('/', routes);
 app.use('/createMeme', createMemes);
 app.use('/api', apiRoute);
 app.use('/users', users);
-//app.use('/sqlConnectionTest', sqlConnectionTest);
 
-//app.get('/',
-//    function (req, res) {
-//        res.render('home', { user: req.user });
-//    });
 
 app.get('/login',
     function (req, res) {
@@ -187,5 +167,4 @@ app.set('port', process.env.PORT || 3000);
 
 var server = app.listen(app.get('port'), function () {
     debug('Express server listening on port ' + server.address().port);
-    //loggerM.writeLogInfo("Server started");
 });

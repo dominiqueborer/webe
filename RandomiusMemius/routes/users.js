@@ -6,14 +6,10 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
-//var dbtest = require('../modules/dbtest');
-var dtr = require('../modules/testmodule');
-//var rmDB = require('../modules/randomiusmemiusDB');
 const sql = require('mssql');
 var rmDB = require('../modules/randomiusmemiusDB');
 var passport = require('passport');
 require('../config/passport-config');
-var rmGlobalConstants = require('../modules/randomiusMemiusGlobalConstants');
 var winston = require('../modules/logging');
 
 /* GET users listing. */
@@ -43,7 +39,6 @@ router.get('/', require('connect-ensure-login').ensureLoggedIn(), function (req,
 });
 /* Post users listing. Will be invoked, if user gets banned / de banned */
 router.post('/', require('connect-ensure-login').ensureLoggedIn(), function (req, res) {
-    //ToDO: Implement Admin Role check
 
     (async () => {
 
@@ -57,7 +52,6 @@ router.post('/', require('connect-ensure-login').ensureLoggedIn(), function (req
             } else {
                 // Not admin user
                 res.redirect("/");
-                //res.render('index', { "user": req.user });
             }
 
         } catch (err) {

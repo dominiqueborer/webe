@@ -35,21 +35,10 @@
     <Compile Include="config\passport-config.js">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="db\index.js" />
-    <Compile Include="db\users.js" />
-    <Compile Include="modules\dbtest.js">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="modules\logging.js">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="modules\randomiusmemiusDB.js">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="modules\randomiusMemiusGlobalConstants.js">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="modules\testmodule.js">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="public\javascripts\jquery-3.3.1.min.js" />
@@ -63,9 +52,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="routes\index.js" />
-    <Compile Include="routes\sqlConnectionTest.js">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="routes\users.js" />
     <Compile Include="views\profile.pug">
       <SubType>Code</SubType>
@@ -89,10 +75,9 @@
     <Content Include="views\footer.pug">
       <SubType>Code</SubType>
     </Content>
-    <Content Include="views\home.pug">
+    <Content Include="views\homeeee.pug">
       <SubType>Code</SubType>
     </Content>
-    <Content Include="views\index - Copy.pug" />
     <Content Include="views\index.pug" />
     <Content Include="views\layout.pug" />
     <Content Include="views\error.pug" />
@@ -113,7 +98,6 @@
   <ItemGroup>
     <Folder Include="logs\" />
     <Folder Include="modules\" />
-    <Folder Include="db\" />
     <Folder Include="config\" />
     <Folder Include="public\" />
     <Folder Include="public\images\" />

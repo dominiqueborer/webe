@@ -6,8 +6,6 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 const uuidv4 = require('uuid/v4');
-//var dbtest = require('../modules/dbtest');
-var dtr = require('../modules/testmodule');
 var rmDB = require('../modules/randomiusmemiusDB');
 const sql = require('mssql');
 var passport = require('passport');
@@ -67,19 +65,16 @@ router.post('/fileupload', require('connect-ensure-login').ensureLoggedIn(), fun
                     let uuidv4Meme = uuidv4();
                     fileNameToDB = uuidv4Meme + "." + splittedName[splittedName.length - 1];
                     file.name = fileNameToDB;
-                    //let pathToBeMoved = path.join(__dirname, '/public/images/');
                     let pathToBeMoved = path.resolve('./public/images/');
                     //Check path, if it is writable
                     try {
                         fs.accessSync(pathToBeMoved, fs.constants.W_OK);
-                        //console.log('can write %s', path);
                     } catch (err) {
                         let msgErr = "Error writing to file system: " + err.toString();
                         winston.error(msgErr);
                         res.status(500).send(msgErr);
                     }
                     file.path = pathToBeMoved + "/" + file.name;
-                    //file.path = "C:/Images/" + file.name; 
                     //Updating database and store meta information
                     rmDB.insertNewMeme(memeTitle, fileNameToDB, 2).then(result => {
 
