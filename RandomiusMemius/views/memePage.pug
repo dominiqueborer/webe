@@ -1,11 +1,15 @@
 ﻿extends layout
 
+
+
 block content
     article(id=meme.Id class="memes")
         input(type="hidden" id="memeId" name="memeId" value=meme.Id)
         input(type="hidden" id="rmPageCounter" name="rmPageCounter" value="1")
         h2 #[a(href="/meme"+meme.Id) #{meme.MemeTitle}]
-        a(href="/meme1234") #[img(src="/images/" + meme.MemeFileName)]
+        a(href="/meme"+meme.Id) #[img(src="/images/" + meme.MemeFileName)]
+        p You want to see the this site in another language?
+        div(id="google_translate_element")
         section(class="commentsLoaded" id="rmCommentContainer")
             
             each comment in comments

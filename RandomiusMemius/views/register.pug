@@ -2,16 +2,29 @@
 
 block content
     h2 Register
-    form(action="/register" method="post" class="register")
-        | User Login: 
-        input(type="text" name="id")
-        | User name: 
-        input(type="text" name="displayName")
-        | Email address:
-        input(type="text" name="mail" )        
-        | Password:
-        input( type="password" name="Password")
-        | Re-enter Password:
-        input( type="password" name="confirmedPassword")
-        input( type="submit" value="Register"  )
-    p Already have an account? #[a(href="/login" class="alreadyAccount") Sign in here!]
+    if messageSuccess
+        p(class="messageSuccess") #{messageSuccess}
+    else
+        if messageFailure
+            p(class="messageFailure") #{messageFailure}
+        form(action="/register" method="post" class="register")
+            | User Name*: 
+            input(type="text" name="pLogin" value=pLogin)
+            br
+            | First name*: 
+            input(type="text" name="pFirstName" value=pFirstName)
+            br
+            | Last name*: 
+            input(type="text" name="pLastName" value=pLastName)
+            br
+            | Email address*:
+            input(type="text" name="pMail" value=pMail )    
+            br    
+            | Password*:
+            input( type="password" name="pPassword")
+            br
+            | Re-enter Password*:
+            input( type="password" name="pConfirmedPassword")
+            br
+            input( type="submit" value="Register"  )
+        p Already have an account? #[a(href="/login" class="alreadyAccount") Sign in here!]

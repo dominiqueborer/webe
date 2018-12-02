@@ -69,8 +69,8 @@ passport.deserializeUser(function (id, cb) {
         //if (user.password != password) { return cb(null, false); }
         (async () => {
             try {
-                let getUserByUserId = await rmDB.findByUserId(id);
-                if (!getUserByUserId.includes("UserId Exists")) {
+                let foundUserByUserId = await rmDB.findByUserId(id);
+                if (!foundUserByUserId.includes("UserId Exists")) {
                     return cb(null, new Error('User ' + id + ' does not exist'));
                 }
                 

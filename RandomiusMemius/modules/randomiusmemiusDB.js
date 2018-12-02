@@ -41,27 +41,6 @@ exports.insertNewMeme = function (memeTitle, memeFilename, userID) {
             }
         })();
     });
-    //return new Promise(function (resolve, reject) {
-    //    (async () => {
-    //        let pool = await new sql.ConnectionPool(rmDB.getSqlConfig());
-    //        await pool.connect();
-    //        await pool.request()
-    //            .input("memeTitle", "random")
-    //            .input("memeCreated", sql.DateTime, new Date())
-    //            .input("memeFileName", fileNameToDB)
-    //            .input("userId", userID)
-    //            //.input('input_parameter', sql.Int, value)
-    //            .query('insert into MemeSet (MemeTitle, MemeCreated, MemeFileName, UserUserId) values (@memeTitle,@memeCreated,@memeFileName,@userId)', (err, result) => {
-    //                console.dir(result);
-    //                if (err) {
-    //                    let varErrorToUser = "Error uploading Meme: " + err.toString();
-    //                    reject(varErrorToUser);
-    //                }
-    //            });
-    //        resolve();  
-    //    })();
-    //});
-    //let pConfig = config;
     
 };
 exports.getMemes = function (page, pageSize) {
@@ -408,6 +387,37 @@ exports.getUserById = function (userId) {
                         } else {
                             reject("Error trying to get user information. Procedure should return 1 response row, but is: " + result.recordset.length);
                         }
+
+                    });
+
+            } catch (err) {
+                let msgErr = "Error database: " + err.toString();
+
+                reject(msgErr);
+            }
+        })();
+    });
+};
+exports.registerNewUser = function (pLogin, pPassword, pFirstName, pLastName, pMail) {
+    return new Promise((resolve, reject) => {
+        (async () => {
+            try {
+                let pool = await new sql.ConnectionPool(config);
+
+                await pool.connect();
+                await pool.request()
+                    .input("pLogin", pLogin)
+                    .input("pPassword", pPassword)
+                    .input("pFirstName", pFirstName)
+                    .input("pLastName", pLastName)
+                    .input("pMail", pMail)
+                    .output("responseMessage", sql.VarChar(254), "initialvalue")
+                    .execute('uspAddUser', (err, result) => {
+                        // ... error checks
+                        if (err) {
+                            reject("Error registering user in database: " + err.toString());
+                        }
+                        resolve(result.output.responseMessage);
 
                     });
 

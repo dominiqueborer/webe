@@ -103,7 +103,7 @@ router.get('/memes/getMemeCommentPages/:pageSize([0-9]+)/:memeId([0-9]+)', funct
     })();
 });
 /* POST a new comment  */
-router.post('/memes/newcomment', function (req, res) {
+router.post('/memes/newcomment',require('connect-ensure-login').ensureLoggedIn(), function (req, res) {
     //Parse comment data
     if (req.body.comment && req.body.memeId) { // && req.params.user) {
         const comment = req.body.comment;

@@ -1,4 +1,7 @@
 ﻿
+function googleTranslateElementInit() {
+    new google.translate.TranslateElement({ pageLanguage: 'en' }, 'google_translate_element');
+}
 //Execute as soon as document is loaded fully
 $(function () {
     // Attach a submit handler to the form
@@ -71,4 +74,8 @@ $(function () {
              });
         });
     });
+    if ($("#google_translate_element")) {
+        //new google.translate.TranslateElement({ pageLanguage: 'en' }, 'google_translate_element');
+        $.getScript("//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit");
+    }
 });
