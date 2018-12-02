@@ -1,4 +1,5 @@
 ﻿
+var winston = require('../modules/logging');
 const sql = require('mssql');
 // config for your database
 var config = {
@@ -31,12 +32,16 @@ exports.insertNewMeme = function (memeTitle, memeFilename, userID) {
                         console.dir(result);
                         if (err) {
                             let varErrorToUser = "Error uploading Meme: " + err.toString();
+                            winston.error(varErrorToUser);
                             reject(varErrorToUser);
                         }
                     });
-                resolve("Successfully inserted Meme to DB");
+                let infoMsg = "Successfully inserted Meme to DB";
+                winston.info(infoMsg);
+                resolve(infoMsg);
             } catch (err) {
                 let msgErr = "Error database: " + err.toString();
+                winston.error(msgErr);
                 reject(msgErr);
             }
         })();
@@ -66,13 +71,16 @@ exports.getMemes = function (page, pageSize) {
 
                 } catch (err) {
                     let msgErr = "Error database: " + err.toString();
+                    winston.error(msgErr);
                     //return msgErr;
                     reject(msgErr);
                 }
             } else {
                 //page is not a number, throw
                 //return new Error("Variable page is not a number");
-                reject("Variable page is not a number");
+                let msgErr = "Variable page is not a number";
+                winston.error(msgErr);
+                reject(msgErr);
             }
         })();
     });
@@ -91,7 +99,9 @@ exports.getUsers = function (page, pageSize) {
                         .execute('getUsers', (err, result) => {
                             // ... error checks
                             if (err) {
-                                reject("Error loading Users: " + err.toString());
+                                let msgErr = "Error loading Users: " + err.toString();
+                                winston.error(msgErr);
+                                reject(msgErr);
                             }
                             //result.recordsets.forEach(function (element) {
                             //    console.log(element);
@@ -102,13 +112,16 @@ exports.getUsers = function (page, pageSize) {
 
                 } catch (err) {
                     let msgErr = "Error database: " + err.toString();
+                    winston.error(msgErr);
                     //return msgErr;
                     reject(msgErr);
                 }
             } else {
                 //page is not a number, throw
                 //return new Error("Variable page is not a number");
-                reject("Variable page is not a number");
+                let msgErr = "Variable page is not a number";
+                winston.error(msgErr);
+                reject(msgErr);
             }
         })();
     });
@@ -126,7 +139,9 @@ exports.getMeme = function (memeId) {
                         .execute('getMeme', (err, result) => {
                             // ... error checks
                             if (err) {
-                                reject("Error loading Meme: " + err.toString());
+                                let msgErr = "Error loading Meme: " + err.toString();
+                                winston.error(msgErr);
+                                reject(msgErr);
                             }
                             //result.recordsets.forEach(function (element) {
                             //    console.log(element);
@@ -144,13 +159,16 @@ exports.getMeme = function (memeId) {
 
                 } catch (err) {
                     let msgErr = "Error database: " + err.toString();
+                    winston.error(msgErr);
                     //return msgErr;
                     reject(msgErr);
                 }
             } else {
                 //page is not a number, throw
                 //return new Error("Variable page is not a number");
-                reject("Variable memeId is not a number");
+                let msgErr = "Variable memeId is not a number";
+                winston.error(msgErr);
+                reject(msgErr);
             }
         })();
     });
@@ -169,19 +187,24 @@ exports.getMemeCommentPages = function (memeId, pageSize) {
                         .execute('getMemeCommentPages', (err, result) => {
                             // ... error checks
                             if (err) {
-                                reject("Error loading Users: " + err.toString());
+                                let msgErr = "Error loading Users: " + err.toString();
+                                winston.error(msgErr);
+                                reject(msgErr);
                             }
                             //We only want one row to be returned, the number of comment pages available
                             if (result.recordset.length == 1) {
                                 resolve(result.recordset[0].pages);
                             } else {
-                                reject("Error loading pageS. Comment pages should be 1, but is: " + result.recordset.length);
+                                let msgErr = "Error loading pageS. Comment pages should be 1, but is: " + result.recordset.length;
+                                winston.error(msgErr);
+                                reject(msgErr);
                             }
                             
                         });
 
                 } catch (err) {
                     let msgErr = "Error database: " + err.toString();
+                    winston.error(msgErr);
                     //return msgErr;
                     reject(msgErr);
                 }
@@ -206,20 +229,25 @@ exports.getMemeComments = function (memeId, page, pageSize) {
                         .execute('getMemeComments', (err, result) => {
                             // ... error checks
                             if (err) {
-                                reject("Error loading Users: " + err.toString());
+                                let msgErr = "Error loading Users: " + err.toString();
+                                winston.error(msgErr);
+                                reject(msgErr);
                             }
                             resolve(result.recordset);
                         });
 
                 } catch (err) {
                     let msgErr = "Error database: " + err.toString();
+                    winston.error(msgErr);
                     //return msgErr;
                     reject(msgErr);
                 }
             } else {
                 //page is not a number, throw
                 //return new Error("Variable page is not a number");
-                reject("Parameter is not a number");
+                let msgErr = "Parameter is not a number";
+                winston.error(msgErr);
+                reject(msgErr);
             }
         })();
     });
@@ -241,13 +269,16 @@ exports.insertNewMemeComment = function (memeComment, memeId, userID) {
                         console.dir(result);
                         if (err) {
                             let varErrorToUser = "Error inserting Meme Comment: " + err.toString();
+                            winston.error(varErrorToUser);
                             reject(varErrorToUser);
                         }
                     });
-                resolve("Successfully inserted Meme to DB");
+                let infoMsg = "Successfully inserted Meme to DB";
+                winston.info(infoMsg);
+                resolve(infoMsg);
             } catch (err) {
                 let msgErr = "Error database: " + err.toString();
-                
+                winston.error(msgErr);
                 reject(msgErr);
             }
         })();
@@ -267,7 +298,9 @@ exports.findByUserId = function (userId) {
                     .execute('findByUserId', (err, result) => {
                         // ... error checks
                         if (err) {
-                            reject("Error finding User by Id: " + err.toString());
+                            let msgErr = "Error finding User by Id: " + err.toString();
+                            winston.error(msgErr);
+                            reject(msgErr);
                         }
                         resolve(result.output.responseMessage);
 
@@ -275,6 +308,7 @@ exports.findByUserId = function (userId) {
 
             } catch (err) {
                 let msgErr = "Error database: " + err.toString();
+                winston.error(msgErr);
 
                 reject(msgErr);
             }
@@ -294,7 +328,9 @@ exports.findByUsername= function (username) {
                     .execute('findByUsername', (err, result) => {
                         // ... error checks
                         if (err) {
-                            reject("Error finding User by Id: " + err.toString());
+                            let msgErr = "Error finding User by Id: " + err.toString();
+                            winston.error(msgErr);
+                            reject(msgErr);
                         }
                         resolve(result.output.responseMessage);
 
@@ -302,6 +338,7 @@ exports.findByUsername= function (username) {
 
             } catch (err) {
                 let msgErr = "Error database: " + err.toString();
+                winston.error(msgErr);
 
                 reject(msgErr);
             }
@@ -322,7 +359,9 @@ exports.getUserAuthentication = function (username, password) {
                     .execute('uspLogin', (err, result) => {
                         // ... error checks
                         if (err) {
-                            reject("Error trying user to authenticate: " + err.toString());
+                            let msgErr = "Error trying user to authenticate: " + err.toString();
+                            winston.error(msgErr);
+                            reject(msgErr);
                         }
                         resolve(result.output.responseMessage);  
 
@@ -330,6 +369,7 @@ exports.getUserAuthentication = function (username, password) {
 
             } catch (err) {
                 let msgErr = "Error database: " + err.toString();
+                winston.error(msgErr);
 
                 reject(msgErr);
             }
@@ -348,19 +388,24 @@ exports.getUser = function (username) {
                     .execute('getUser', (err, result) => {
                         // ... error checks
                         if (err) {
-                            reject("Error trying to get user information: " + err.toString());
+                            let msgErr = "Error trying to get user information: " + err.toString();
+                            winston.error(msgErr);
+                            reject(msgErr);
                         }
                         //We only want one row to be returned, one user
                         if (result.recordset.length == 1) {
                             resolve(result.recordset[0]);
                         } else {
-                            reject("Error trying to get user information. Procedure should return 1 response row, but is: " + result.recordset.length);
+                            let msgErr = "Error trying to get user information. Procedure should return 1 response row, but is: " + result.recordset.length;
+                            winston.error(msgErr);
+                            reject(msgErr);
                         }
 
                     });
 
             } catch (err) {
                 let msgErr = "Error database: " + err.toString();
+                winston.error(msgErr);
 
                 reject(msgErr);
             }
@@ -379,19 +424,24 @@ exports.getUserById = function (userId) {
                     .execute('getUserById', (err, result) => {
                         // ... error checks
                         if (err) {
-                            reject("Error trying to get user information: " + err.toString());
+                            let msgErr = "Error trying to get user information: " + err.toString();
+                            winston.error(msgErr);
+                            reject(msgErr);
                         }
                         //We only want one row to be returned, one user
                         if (result.recordset.length == 1) {
                             resolve(result.recordset[0]);
                         } else {
-                            reject("Error trying to get user information. Procedure should return 1 response row, but is: " + result.recordset.length);
+                            let msgErr = "Error trying to get user information. Procedure should return 1 response row, but is: " + result.recordset.length;
+                            winston.error(msgErr);
+                            reject(msgErr);
                         }
 
                     });
 
             } catch (err) {
                 let msgErr = "Error database: " + err.toString();
+                winston.error(msgErr);
 
                 reject(msgErr);
             }
@@ -415,7 +465,9 @@ exports.registerNewUser = function (pLogin, pPassword, pFirstName, pLastName, pM
                     .execute('uspAddUser', (err, result) => {
                         // ... error checks
                         if (err) {
-                            reject("Error registering user in database: " + err.toString());
+                            let msgErr = "Error registering user in database: " + err.toString();
+                            winston.error(msgErr);
+                            reject(msgErr);
                         }
                         resolve(result.output.responseMessage);
 
@@ -423,6 +475,132 @@ exports.registerNewUser = function (pLogin, pPassword, pFirstName, pLastName, pM
 
             } catch (err) {
                 let msgErr = "Error database: " + err.toString();
+                winston.error(msgErr);
+
+                reject(msgErr);
+            }
+        })();
+    });
+};
+exports.isUserBanned = function (userId) {
+    return new Promise((resolve, reject) => {
+        (async () => {
+            try {
+                let pool = await new sql.ConnectionPool(config);
+
+                await pool.connect();
+                await pool.request()
+                    .input("userId", userId)
+                    .output("responseMessage", sql.VarChar(254), "initialvalue")
+                    .execute('isUserBanned', (err, result) => {
+                        // ... error checks
+
+                        if (err) {
+                            let msgErr = "Error getting user banned status in database: " + err.toString();
+                            winston.error(msgErr);
+                            reject(msgErr);
+                        }
+                        resolve(result.output.responseMessage);
+
+                    });
+
+            } catch (err) {
+                let msgErr = "Error database: " + err.toString();
+                winston.error(msgErr);
+
+                reject(msgErr);
+            }
+        })();
+    });
+};
+exports.hasAdminRole = function (userId) {
+    return new Promise((resolve, reject) => {
+        (async () => {
+            try {
+                let pool = await new sql.ConnectionPool(config);
+
+                await pool.connect();
+                await pool.request()
+                    .input("userId", userId)
+                    .output("responseMessage", sql.Int, 0)
+                    .execute('hasAdminRole', (err, result) => {
+                        // ... error checks
+
+                        if (err) {
+                            let msgErr = "Error getting user admin role status in database: " + err.toString();
+                            winston.error(msgErr);
+                            reject(msgErr);
+                        }
+                        resolve(result.output.responseMessage);
+
+                    });
+
+            } catch (err) {
+                let msgErr = "Error database: " + err.toString();
+                winston.error(msgErr);
+
+                reject(msgErr);
+            }
+        })();
+    });
+};
+exports.toggleUserBan = function (userId) {
+    return new Promise((resolve, reject) => {
+        (async () => {
+            try {
+                let pool = await new sql.ConnectionPool(config);
+
+                await pool.connect();
+                await pool.request()
+                    .input("userId", userId)
+                    .output("responseMessage", sql.VarChar(254), "initialvalue")
+                    .execute('toggleUserBan', (err, result) => {
+                        // ... error checks
+
+                        if (err) {
+                            let msgErr = "Error toggling user ban status: " + err.toString();
+                            winston.error(msgErr);
+                            reject(msgErr);
+                        }
+                        resolve(result.output.responseMessage);
+
+                    });
+
+            } catch (err) {
+                let msgErr = "Error database: " + err.toString();
+                winston.error(msgErr);
+
+                reject(msgErr);
+            }
+        })();
+    });
+};
+exports.updateUserPassword = function (userId,password) {
+    return new Promise((resolve, reject) => {
+        (async () => {
+            try {
+                let pool = await new sql.ConnectionPool(config);
+
+                await pool.connect();
+                await pool.request()
+                    .input("userId", userId)
+                    .input("pPassword", password)
+                    .output("responseMessage", sql.VarChar(254), "initialvalue")
+                    .execute('updateUserPassword', (err, result) => {
+                        // ... error checks
+
+                        if (err) {
+                            let msgErr = "Error updating user password: " + err.toString();
+                            winston.error(msgErr);
+                            reject(msgErr);
+                        }
+                        resolve(result.output.responseMessage);
+
+                    });
+
+            } catch (err) {
+                let msgErr = "Error database: " + err.toString();
+                winston.error(msgErr);
 
                 reject(msgErr);
             }

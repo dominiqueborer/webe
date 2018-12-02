@@ -384,3 +384,98 @@ END
 GO
 
 
+USE [randomiusmemiusApp]
+GO
+
+/****** Object:  StoredProcedure [dbo].[isUserBanned]    Script Date: 02.12.2018 15:10:34 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+
+
+CREATE PROCEDURE [dbo].[isUserBanned]
+    @userId int, 
+    @responseMessage NVARCHAR(250) OUTPUT
+AS
+BEGIN
+    SET NOCOUNT ON
+
+
+        Select @responseMessage=Banned from dbo.[User] where dbo.[User].UserID = @userId;
+
+
+END
+GO
+USE [randomiusmemiusApp]
+GO
+
+/****** Object:  StoredProcedure [dbo].[toggleUserBan]    Script Date: 02.12.2018 16:48:44 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+
+
+
+
+
+CREATE PROCEDURE [dbo].[toggleUserBan]
+    @userId int, 
+    @responseMessage NVARCHAR(250) OUTPUT
+AS
+BEGIN
+    SET NOCOUNT ON
+
+		if ((Select Banned from dbo.[User] where dbo.[User].UserID = @userId)=1)
+		begin
+			update dbo.[User] Set Banned = 0 where dbo.[User].UserID = @userId; 
+			Set @responseMessage='De Ban of user';
+			end
+		else
+		begin
+			update dbo.[User] Set Banned = 1 where dbo.[User].UserID = @userId ;       
+			Set @responseMessage = 'Ban of user';
+			end
+END
+GO
+
+
+USE [randomiusmemiusApp]
+GO
+
+/****** Object:  StoredProcedure [dbo].[uspAddUser]    Script Date: 02.12.2018 17:30:20 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+
+CREATE PROCEDURE [dbo].[updateUserPassword]
+    @userId int,
+    @pPassword NVARCHAR(50),
+    @responseMessage NVARCHAR(250) OUTPUT
+AS
+BEGIN
+    SET NOCOUNT ON
+
+    DECLARE @salt UNIQUEIDENTIFIER=NEWID()
+    BEGIN TRY
+		update dbo.[User] Set PasswordHash=HASHBYTES('SHA2_512',@pPassword+CAST(@salt AS NVARCHAR(36))), Salt= @salt where dbo.[User].UserID = @userId
+
+       SET @responseMessage='Success'
+
+    END TRY
+    BEGIN CATCH
+        SET @responseMessage=ERROR_MESSAGE() 
+    END CATCH
+
+END
+GO
+
+

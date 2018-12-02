@@ -15,6 +15,7 @@ require('../config/passport-config');
 var formidable = require('formidable');
 var fs = require('fs');
 util = require('util');
+var winston = require('../modules/logging');
 
 
 
@@ -40,7 +41,8 @@ router.get('/', function (req, res) {
 });
 /* POST CreateMeme/fileupload page. */
 router.post('/fileupload', require('connect-ensure-login').ensureLoggedIn(), function (req, res) {
-    
+
+    winston.info(`"User tries to post a meme " ${req.user.toString()} - ${req.originalUrl} - ${req.method} - ${req.ip}`);
     (async () => {
 
         try {
@@ -72,8 +74,9 @@ router.post('/fileupload', require('connect-ensure-login').ensureLoggedIn(), fun
                         fs.accessSync(pathToBeMoved, fs.constants.W_OK);
                         //console.log('can write %s', path);
                     } catch (err) {
-                        console.log("%s doesn't exist", pathToBeMoved);
-                        res.status(500).send("Error writing to file system: " + err.toString());
+                        let msgErr = "Error writing to file system: " + err.toString();
+                        winston.error(msgErr);
+                        res.status(500).send(msgErr);
                     }
                     file.path = pathToBeMoved + "/" + file.name;
                     //file.path = "C:/Images/" + file.name; 
@@ -82,6 +85,8 @@ router.post('/fileupload', require('connect-ensure-login').ensureLoggedIn(), fun
 
                         res.render('uploadedMeme', {"user": req.user });
                     }).catch(function (error) {
+                        
+                        winston.error(error.toString() + req.user.toString());
                         res.render('uploadedMeme', { "varErrorToUser": error.toString(), "user": req.user });
                     });
                 
@@ -89,6 +94,7 @@ router.post('/fileupload', require('connect-ensure-login').ensureLoggedIn(), fun
         } catch (err) {
             // ... error checks
             varErrorToUser += "Error uploading Meme: " + err.toString();
+            winston.error(varErrorToUser);
             res.render('uploadedMeme', { "varErrorToUser": varErrorToUser, "user": req.user });
             //reject(err);
         }

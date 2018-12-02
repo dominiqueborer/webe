@@ -15,6 +15,7 @@ require('../config/passport-config');
 var formidable = require('formidable');
 var fs = require('fs');
 util = require('util');
+var winston = require('../modules/logging');
 
 router.use(bodyParser.json());
 router.use(bodyParser.urlencoded({     // to support URL-encoded bodies
@@ -28,15 +29,18 @@ router.get('/memes', function (req, res) {
     //Return default 10 items
     (async () => {
         try {
-            const memesJSON = await rmDB.getMemes(1, 10)
+            const memesJSON = await rmDB.getMemes(1, 10);
+
             res.status(200).send({
                 success: 'true',
                 message: 'memes retrieved successfully',
                 memes: memesJSON
             })
             //res.write(await rmDB.getMemes(1, 10));
-        } catch(err){
-            res.status(500).send("Error retrieving Memes: "+err.toString());
+        } catch (err) {
+            let msgErr = "Error retrieving Memes: " + err.toString();
+            winston.error(msgErr);
+            res.status(500).send(msgErr);
         }
         //let resultset = await rmDB.getMemes(1, 10);
         
@@ -47,7 +51,7 @@ router.get('/memes/:page([0-9]+)', function (req, res) {
     const page = parseInt(req.params.page, 10);
     (async () => {
         try {
-            const memesJSON = await rmDB.getMemes(page, 10)
+            const memesJSON = await rmDB.getMemes(page, 10);
             res.status(200).send({
                 success: 'true',
                 message: 'memes retrieved successfully',
@@ -55,7 +59,9 @@ router.get('/memes/:page([0-9]+)', function (req, res) {
             })
             //res.write(await rmDB.getMemes(1, 10));
         } catch (err) {
-            res.status(500).send("Error retrieving Memes: " + err.toString());
+            let msgErr = "Error retrieving Memes: " + err.toString();
+            winston.error(msgErr);
+            res.status(500).send(msgErr);
         }
         //let resultset = await rmDB.getMemes(1, 10);
 
@@ -76,7 +82,9 @@ router.get('/memes/getMemeComments/:page([0-9]+)/:memeId([0-9]+)', function (req
             })
             //res.write(await rmDB.getMemes(1, 10));
         } catch (err) {
-            res.status(500).send("Error retrieving Meme Comments: " + err.toString());
+            let msgErr = "Error retrieving Meme Comments: " + err.toString();
+            winston.error(msgErr);
+            res.status(500).send(msgErr);
         }
         //let resultset = await rmDB.getMemes(1, 10);
 
@@ -97,7 +105,9 @@ router.get('/memes/getMemeCommentPages/:pageSize([0-9]+)/:memeId([0-9]+)', funct
                 memeCommentPages: memeCommentPagesJSON
             });
         } catch (err) {
-            res.status(500).send("Error retrieving meme comment pages: " + err.toString());
+            let msgErr = "Error retrieving meme comment pages: " + err.toString();
+            winston.error(msgErr);
+            res.status(500).send(msgErr);
         }
 
     })();
@@ -105,6 +115,7 @@ router.get('/memes/getMemeCommentPages/:pageSize([0-9]+)/:memeId([0-9]+)', funct
 /* POST a new comment  */
 router.post('/memes/newcomment',require('connect-ensure-login').ensureLoggedIn(), function (req, res) {
     //Parse comment data
+    winston.info(`"User tries to post a new comment " ${req.user.toString()} - ${req.originalUrl} - ${req.method} - ${req.ip}`);
     if (req.body.comment && req.body.memeId) { // && req.params.user) {
         const comment = req.body.comment;
         const userId = 1;//parseInt(req.params.user.userId, 10);
@@ -122,7 +133,9 @@ router.post('/memes/newcomment',require('connect-ensure-login').ensureLoggedIn()
             }
         })();
     } else {
-        res.status(500).send("Invalid new Comment Request!");
+        let msgErr = "Invalid new Comment Request!";
+        winston.error(msgErr);
+        res.status(500).send(msgErr);
 
     }
 });

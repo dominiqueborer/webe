@@ -14,6 +14,7 @@ var rmDB = require('../modules/randomiusmemiusDB');
 var passport = require('passport');
 require('../config/passport-config');
 var rmGlobalConstants = require('../modules/randomiusMemiusGlobalConstants');
+var winston = require('../modules/logging');
 
 var config = {
     user: 'randomiusmemius',
@@ -49,7 +50,7 @@ router.get('/', function (req, res) {
 
 
         } catch (err) {
-            // ... error checks
+            winston.error(err);
             reject(err);
         }
 
@@ -78,10 +79,12 @@ router.get('/meme([0-9]{1,3})', function (req, res) {
                     let commentPages = await rmDB.getMemeCommentPages(memeId, 10);
                     res.render('memePage', { "meme": meme, "comments": commments, "commentPages": commentPages, "user": req.user });
                 } else {
-                    res.status(500).send("Error in retrieving Meme. Result length is: " + meme.length);
+                    let msgErr = "Error in retrieving Meme. Result length is: " + meme.length;
+                    winston.error(msgErr);
+                    res.status(500).send();
                 }
             } catch (err) {
-                // ... error checks
+                winston.error(err);
                 res.render('memePage', { "error": err.toString(), "user": req.user });
             }
 
@@ -94,8 +97,6 @@ router.get('/meme([0-9]{1,3})', function (req, res) {
 });
 /* GET register page. */
 router.get('/register', require('connect-ensure-login').ensureLoggedOut(), function (req, res) {
-    //dbtest.messageHandler();
-    //let resultTable = dbtest.getRDataTableRows();
 
     res.render('register', { "user": req.user });
 });
@@ -122,15 +123,20 @@ router.post('/register', require('connect-ensure-login').ensureLoggedOut(), func
                     } 
                     let couldRegister = await rmDB.registerNewUser(pLogin, pPassword, pFirstName, pLastName, pMail);
                     if (!couldRegister.includes("Success")) {
+
+                        let msgErr = "Error in registering on database, please try again.";
+                        winston.error(msgErr);
                         res.render('register', {
-                            messageFailure: "Error in registering on database, please try again.", "pLogin": pLogin, "pFirstName": pFirstName, "pLastName": pLastName, "pMail": pMail
+                            messageFailure: msgErr, "pLogin": pLogin, "pFirstName": pFirstName, "pLastName": pLastName, "pMail": pMail
                         });
 
                     } else {
                         res.render('register', { messageSuccess: "Thanks for registering! You can now login and upload memes or post comments! Enjoy!" });
                     }
                 } catch (err) {
-                    res.status(500).send("Error registering new user: " + err.toString());
+                    let msgErr = "Error registering new user: " + err.toString();
+                    winston.error(msgErr);
+                    res.status(500).send(msgErr);
                 }
             })();
         } else {

@@ -14,19 +14,56 @@ var rmDB = require('../modules/randomiusmemiusDB');
 var passport = require('passport');
 require('../config/passport-config');
 var rmGlobalConstants = require('../modules/randomiusMemiusGlobalConstants');
+var winston = require('../modules/logging');
 
 /* GET users listing. */
-router.get('/', function (req, res) {
+router.get('/', require('connect-ensure-login').ensureLoggedIn(), function (req, res) {
+
+    (async () => {
+
+        try {
+
+            let userAdminRole = await rmDB.hasAdminRole(req.user.id);
+            if (userAdminRole = 1 ) {
+
+                let users = await rmDB.getUsers(1, 10);
+                res.render('userList', { "users": users, "user": req.user });
+            } else {
+                // Not admin user
+                res.render('index', { "user": req.user });
+            }
+
+        } catch (err) {
+            let msgErr = "Error loading User List " + err.toString();
+            winston.error(msgErr);
+            res.status(500).send(msgErr);
+        }
+
+    })();
+});
+/* Post users listing. Will be invoked, if user gets banned / de banned */
+router.post('/', require('connect-ensure-login').ensureLoggedIn(), function (req, res) {
     //ToDO: Implement Admin Role check
 
     (async () => {
 
         try {
-            let users = await rmDB.getUsers(1, 10);            
-            res.render('userList', { "users": users, "user": req.user });
+            let userAdminRole = await rmDB.hasAdminRole(req.user.id);
+            if (userAdminRole = 1 && req.body.userId) {
+                await rmDB.toggleUserBan(req.body.userId);
 
-        } catch (err) {            
-            res.status(500).send("Error loading User List " + err.toString());
+                let users = await rmDB.getUsers(1, 10);
+                res.render('userList', { "users": users, "user": req.user });
+            } else {
+                // Not admin user
+                res.redirect("/");
+                //res.render('index', { "user": req.user });
+            }
+
+        } catch (err) {
+            let msgErr = "Error loading User List " + err.toString();
+            winston.error(msgErr);
+            res.status(500).send(msgErr);
         }
 
     })();

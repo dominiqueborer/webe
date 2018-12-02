@@ -3,6 +3,7 @@ var passport = require('passport');
 var Strategy = require('passport-local').Strategy;
 var db = require('../db');
 var rmDB = require('../modules/randomiusmemiusDB');
+var winston = require('winston');
 //**************Passport config***************
 
 // Configure the local strategy for use by Passport.
@@ -20,6 +21,8 @@ passport.use(new Strategy(
                 try {
                     let loginRequest = await rmDB.findByUsername(username);
                     if (!loginRequest.includes("Username Exists")) {
+                        winston.info("Username does not exist" + username);
+                        //loggerM.writeLogInfo("Username does not exist" + username);
                         return cb(null, false);
                     } 
                     //Try to authenticate 
@@ -28,24 +31,22 @@ passport.use(new Strategy(
                         // Now get user information and match it to passport
                         let userSql = await rmDB.getUser(username);
                         let user = { id: userSql.UserId, username: userSql.LoginName, displayName: userSql.LoginName, emails: [{ value: userSql.Mail }] };
-
+                        winston.info("User successfully authenticated" + username);
                         return cb(null, user);
 
                     } else {
                         //wrong password
+                        winston.info("Username does not match with password" + username);
                         return cb(null, false);
                     }
                     
                 } catch (err) {
                     //Insert SQL Log 
-                    console.log(err.toString());
+                    winston.error("SQL database error" + err.toString());
                     return cb(err);
                 }
 
             })();
-            //if (user.password != password) { return cb(null, false); }
-      
-            //return cb(null, user);
         });
     }));
 
@@ -66,41 +67,30 @@ passport.deserializeUser(function (id, cb) {
 
     process.nextTick(function () {
         //User exists, compare entered password
-        //if (user.password != password) { return cb(null, false); }
         (async () => {
             try {
                 let foundUserByUserId = await rmDB.findByUserId(id);
                 if (!foundUserByUserId.includes("UserId Exists")) {
+                    winston.error("Could not find userID while deserializing of user" + foundUserByUserId);
                     return cb(null, new Error('User ' + id + ' does not exist'));
                 }
                 
                 // Now get user information and match it to passport
                 let userSql = await rmDB.getUserById(id);
-                let user = { id: userSql.UserId, username: userSql.LoginName, displayName: userSql.LoginName, emails: [{ value: userSql.Mail }] };
-
+                let user = { id: userSql.UserId, username: userSql.LoginName, displayName: userSql.LoginName, firstName: userSql.FirstName, lastName: userSql.LastName, emails: [{ value: userSql.Mail }], Banned: userSql.Banned  ,UserRoleSetId: userSql.UserRoleSetId };
+                winston.info("Successfully deserialized user" + userSql.LoginName);
                 return cb(null, user);
                 
 
             } catch (err) {
                 //Insert SQL Log 
-                console.log(err.toString());
+                winston.error("SQL database error" + err.toString());
                 return cb(err);
             }
 
         })();
     });
 
-    //db.users.findById(id, function (err, user) {
-    //    if (err) { return cb(err); }
-    //    cb(null, user);
-    //});
 });
 //************END Passport configuration**************
-
-
-////******Additional Passport configuration*********
-//app.use(require('morgan')('combined'));
-//app.use(require('cookie-parser')());
-//app.use(require('body-parser').urlencoded({ extended: true }));
-//app.use(require('express-session')({ secret: 'keyboard cat', resave: false, saveUninitialized: false }));
 

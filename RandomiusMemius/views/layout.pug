@@ -18,6 +18,9 @@ html
                         ul
                             li #[a(href="/profile") #{user.username}]
                             li #[a(href="/createMeme") Upload new Meme!]
+                            li #[a(href="/logout") Logout]
+                            if user.UserRoleSetId===1
+                                li #[a(href="/users") User List]
                     else 
                         || #[a(href="/register") Register Now!] | #[a(href="/login") Sign in]
                         

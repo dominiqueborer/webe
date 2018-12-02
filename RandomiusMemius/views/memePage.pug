@@ -19,11 +19,14 @@ block content
             if(commentPages > 1)
                 button(class="loadMoreComments" id="loadMoreComments") Load more Comments
 
-        if user 
-            form(action="meme"+meme.Id id="memeCommentForm" method="POST")                
-                textarea(rows="4" cols="50" name="comment" form="memeCommentForm"+meme.Id ) Enter comment here...
-                br
-                input(type="submit" value="Post comment")
+        if user             
+            if user.Banned===true
+                | Sorry, you are currently banned and cannot use RandomiusMemius with all functions!
+            else
+                form(action="meme"+meme.Id id="memeCommentForm" method="POST")                
+                    textarea(rows="4" cols="50" name="comment" form="memeCommentForm"+meme.Id ) Enter comment here...
+                    br
+                    input(type="submit" value="Post comment")
             
         else
             p If you want to post a comment, you need to #[a(href="/login" class="signIn") sign in]. Already have an account? #[a(href="/login" class="alreadyAccount") Sign in here!]

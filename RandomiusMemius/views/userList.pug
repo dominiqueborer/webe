@@ -8,8 +8,12 @@ block content
                 td #{userItem.LoginName}
                 if userItem.Banned
                     td 
-                        button(class="banned") De-Ban
+                        form(action="/users" method="POST" class="users")                            
+                            input(type="hidden" id="userId" name="userId" value=userItem.UserID)
+                            input( type="submit" value="De-Ban"  )
                 else
                     td 
-                        button(class="notBanned") Ban
+                        form(action="/users" method="POST" class="users")                            
+                            input(type="hidden" id="userId" name="userId" value=userItem.UserID)
+                            input( type="submit" value="Ban"  )
                 

@@ -1,26 +1,26 @@
 ﻿extends layout
 
 block content
+    
+    if messageSuccess
+        p(class="messageSuccess") #{messageSuccess}
 
-    p   ID: #{user.id} 
-        | Username: #{user.username} 
-        | Name: #{user.displayName} 
-        if '#{user.emails}'
-            | Email: #{user.emails[0].value}
-            a(href="/logout")   Log out
+    if messageFailure
+        p(class="messageFailure") #{messageFailure}
     form(action="/profile" method="post" class="editProfile")
-        | User Login: #[input(type="text" name="id" value=user.id)]
+        | User Login: #{user.username} 
         br
-        | User name:  #[input(type="text" name="displayName" value=user.displayName )]
+        | User First name: #{user.firstName} 
         br
-        | Email address: #[input(type="text" name="mail" value=user.mail )]
+        | User Last name: #{user.lasttName} 
+        br
+        | Email address: #{user.emails[0].value}
         p(class="profileNote") Note: To change your password or mail address, you have to enter your current password.
-        | Password: #[input( type="password" name="Password")]
+        | Password: #[input( type="password" id="password" name="password")]
         br
-        | New Password: #[input( type="password" name="NewPassword")]
+        | New Password: #[input( type="password" id="newPassword" name="newPassword")]
         br
-        | Re-enter Password: #[input( type="password" name="confirmedPassword") ]
+        | Re-enter Password: #[input( type="password" id="confirmedPassword" name="confirmedPassword") ]
         br
-        input( type="submit" value="Delete Profile" )
         input( type="submit" value="Submit"  )
 
